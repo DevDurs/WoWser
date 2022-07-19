@@ -1,0 +1,4 @@
+py-cord
+pyyaml
+apscheduler
+requests
