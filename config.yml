@@ -1,0 +1,5 @@
+discordToken: OTk4NjQzMjg3MzU3NDExNDA5.G57pNW.YtyPsM7DytCslnzP-r2U7KKHd8_IsFVYTrRWxU
+tokenAlarmChannel: 998661019561889823
+tokenAlarmCost: '350000'
+updateInterval: 30
+wowTokenAPI: https://eu.api.blizzard.com/data/wow/token/index?namespace=dynamic-eu&locale=en_US&access_token=USLTce7spigKxpebetJ2WRAg7mtH51jmCG
