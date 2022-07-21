@@ -4,11 +4,41 @@ from discord.ext import commands
 import requests
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 import yaml
+import os
 
-bot = commands.Bot()
 with open('config.yml', 'r') as file: #Load Config
     conf=yaml.safe_load(file)
 
+try:
+    for disc,client,secret in os.environ.items():
+        conf['discordToken'] = disc
+        conf['clientID'] = client
+        conf['clientSecret'] = secret
+        conf['setup'] = False
+        with open("config.yml", "w") as save:
+            yaml.dump(conf, save)
+except:
+    print("No arguments provided. Attempting terminal setup.")
+    if conf['setup'] == True:
+        try:
+            print("enter discord token")
+            conf['discordToken'] = input()
+            print("\033c")
+            print("enter blizz client id")
+            conf['clientID'] = input()
+            print("\033c")
+            print("enter blizz client secret")
+            conf['clientSecret'] = input()
+            print("\033c")
+            print("Settings Saved.")
+            conf['setup'] = False
+            with open("config.yml", "w") as save:
+                yaml.dump(conf, save)
+        except:
+            print("Terminal setup failed.")
+
+
+bot = commands.Bot()
 
 def getAccessToken(client_id, client_secret, region = conf['region']):
     data = { 'grant_type': 'client_credentials' }

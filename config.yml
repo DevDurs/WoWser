@@ -1,7 +1,8 @@
+clientID:
+clientSecret:
 discordToken:
+region: eu
+setup: True
 tokenAlarmChannel: 998661019561889823
 tokenAlarmCost: '350000'
 updateInterval: 30
-region: eu
-clientID:
-clientSecret: 
