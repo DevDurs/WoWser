@@ -9,7 +9,14 @@ bot = commands.Bot()
 with open('config.yml', 'r') as file: #Load Config
     conf=yaml.safe_load(file)
 
-wowTokenAPI = requests.get(conf['wowTokenAPI']) #WoW Token has it's own API link
+
+def getAccessToken(client_id, client_secret, region = conf['region']):
+    data = { 'grant_type': 'client_credentials' }
+    response = requests.post('https://%s.battle.net/oauth/token' % region, data=data, auth=(client_id, client_secret))
+    tok = response.json()['access_token']
+    return tok
+
+wowTokenAPI = requests.get('https://eu.api.blizzard.com/data/wow/token/index?namespace=dynamic-' + str(conf['region']) + '&locale=en_US&access_token=' + str(getAccessToken(conf['clientID'], conf['clientSecret'])))
 
 @bot.event  #Bot Init
 async def on_ready():
@@ -25,7 +32,7 @@ async def on_ready():
 
 @bot.slash_command(name="token", description="Prints the current EU WoW Token cost.")
 async def tokenSlash(ctx): #This block adds a /command to Discord.
-    await ctx.respond(wowToken()) #This is the response given to the user.
+    await ctx.respond(getToken(formatted = True)) #This is the response given to the user.
 
 def getToken(formatted=False): #This is where we're pulling the API. Grab price, then divide by 10000 (format bug)
     out = int(wowTokenAPI.json()['price'] / 10000)
@@ -42,7 +49,7 @@ async def update(): #This updates the "Watching: Token 100,000 Gold"
     await tokenAlarm()
 
 async def tokenAlarm(): #Handles the alarm should the price rise above the set threshold.
-    cost = getToken()
+    cost = getToken(formatted=False)
     if cost > int(conf['tokenAlarmCost']):
         dout = "WoW token is currently exceeding " + "{:,}".format(int(conf["tokenAlarmCost"]))+' Gold' + ". Current Rate: " + "{:,}".format(cost)+' Gold.'
         await bot.get_channel(conf['tokenAlarmChannel']).send(dout) #Send to channel specified.

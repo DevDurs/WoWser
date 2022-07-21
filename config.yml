@@ -2,4 +2,6 @@ discordToken:
 tokenAlarmChannel: 998661019561889823
 tokenAlarmCost: '350000'
 updateInterval: 30
-wowTokenAPI: 
+region: eu
+clientID:
+clientSecret: 
